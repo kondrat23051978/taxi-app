@@ -29,15 +29,15 @@
         <option value="Бизнес">Бизнес</option>
     </select>
     
-    <button onclick="sendOrder()">🚖 Рассчитать стоимость</button>
+    <button onclick="sendOrder()" id="mainBtn">🚖 Рассчитать стоимость</button>
 
     <script>
-       let tg = window.Telegram.WebApp;
+        let tg = window.Telegram.WebApp;
         tg.expand(); 
         
         function sendOrder() {
-            let btn = document.querySelector("button");
-            btn.innerText = "⏳ Отправка..."; // Кнопка покажет, что процесс пошел
+            let btn = document.getElementById("mainBtn");
+            btn.innerText = "⏳ Отправка..."; 
             
             let data = {
                 from: document.getElementById("from").value,
@@ -47,7 +47,6 @@
                 clientName: tg.initDataUnsafe?.user?.first_name
             };
             
-            // ВСТАВЬ СВОЮ ССЫЛКУ ИЗ MAKE СТРОГО МЕЖДУ КАВЫЧКАМИ:
             let webhookUrl = "https://hook.eu1.make.com/hvm8e74ivxv19ox2421l7np8hpd133hw";
             
             fetch(webhookUrl, {
@@ -57,17 +56,17 @@
             })
             .then(response => {
                 if (response.ok) {
-                    tg.close(); // Если Make принял данные - закрываем
+                    tg.close(); 
                 } else {
-                    alert("Make не принял данные! Ошибка сервера: " + response.status);
+                    alert("Ошибка сервера Make: " + response.status);
                     btn.innerText = "🚖 Рассчитать стоимость";
                 }
             })
             .catch(error => {
-                alert("Ошибка отправки! Проверь правильность ссылки: " + error);
+                alert("Ошибка интернета: " + error);
                 btn.innerText = "🚖 Рассчитать стоимость";
             });
         }
-   </script>
+    </script>
 </body>
 </html>
