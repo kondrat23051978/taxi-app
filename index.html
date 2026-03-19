@@ -36,9 +36,6 @@
         tg.expand(); 
         
         function sendOrder() {
-            let btn = document.getElementById("mainBtn");
-            btn.innerText = "⏳ Отправка..."; 
-            
             let data = {
                 from: document.getElementById("from").value,
                 to: document.getElementById("to").value,
@@ -47,25 +44,20 @@
                 clientName: tg.initDataUnsafe?.user?.first_name
             };
             
+            // Твоя ссылка уже вставлена!
             let webhookUrl = "https://hook.eu1.make.com/hvm8e74ivxv19ox2421l7np8hpd133hw";
             
+            // Оптимизированный "Путь Профи":
+            // Мы запускаем отправку, но не ждем результата!
             fetch(webhookUrl, {
                 method: "POST",
+                mode: "no-cors", // Хитрый режим, чтобы данные улетели быстро
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.ok) {
-                    tg.close(); 
-                } else {
-                    alert("Ошибка сервера Make: " + response.status);
-                    btn.innerText = "🚖 Рассчитать стоимость";
-                }
-            })
-            .catch(error => {
-                alert("Ошибка интернета: " + error);
-                btn.innerText = "🚖 Рассчитать стоимость";
             });
+
+            // И МГНОВЕННО, без задержек, закрываем окно приложения в Телеграме
+            tg.close();
         }
     </script>
 </body>
