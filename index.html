@@ -32,19 +32,34 @@
     <button onclick="sendOrder()">🚖 Рассчитать стоимость</button>
 
     <script>
+       <script>
         let tg = window.Telegram.WebApp;
         tg.expand(); 
         
         function sendOrder() {
+            // Собираем данные + автоматически берем ID клиента из Телеграма!
             let data = {
                 from: document.getElementById("from").value,
                 to: document.getElementById("to").value,
-                tariff: document.getElementById("tariff").value
+                tariff: document.getElementById("tariff").value,
+                clientId: tg.initDataUnsafe?.user?.id,
+                clientName: tg.initDataUnsafe?.user?.first_name
             };
             
-            tg.sendData(JSON.stringify(data));
-            tg.close();
+            // ВСТАВЬ СВОЮ ССЫЛКУ ИЗ MAKE МЕЖДУ КАВЫЧКАМИ НИЖЕ:
+            let webhookUrl = https://hook.eu1.make.com/qe9leepnfsc72tadykats7b8mozuegcj;
+            
+            // Отправляем данные напрямую в твой сценарий Make
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                tg.close(); // Закрываем окошко
+            });
         }
-    </script>
+    </script></script>
 </body>
 </html>
