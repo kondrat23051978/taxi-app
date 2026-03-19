@@ -32,12 +32,13 @@
     <button onclick="sendOrder()">🚖 Рассчитать стоимость</button>
 
     <script>
-       <script>
-        let tg = window.Telegram.WebApp;
+       let tg = window.Telegram.WebApp;
         tg.expand(); 
         
         function sendOrder() {
-            // Собираем данные + автоматически берем ID клиента из Телеграма!
+            let btn = document.querySelector("button");
+            btn.innerText = "⏳ Отправка..."; // Кнопка покажет, что процесс пошел
+            
             let data = {
                 from: document.getElementById("from").value,
                 to: document.getElementById("to").value,
@@ -46,20 +47,27 @@
                 clientName: tg.initDataUnsafe?.user?.first_name
             };
             
-            // ВСТАВЬ СВОЮ ССЫЛКУ ИЗ MAKE МЕЖДУ КАВЫЧКАМИ НИЖЕ:
-            let webhookUrl = "https://hook.eu1.make.com/hvm8e74ivxv19ox2421l7np8hpd133hw";
+            // ВСТАВЬ СВОЮ ССЫЛКУ ИЗ MAKE СТРОГО МЕЖДУ КАВЫЧКАМИ:
+            let webhookUrl = "https://hook.eu1.make.com/hvm8e74ivxv19ox2421l7np8hpd133hw;
             
-            // Отправляем данные напрямую в твой сценарий Make
             fetch(webhookUrl, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
-            }).then(response => {
-                tg.close(); // Закрываем окошко
+            })
+            .then(response => {
+                if (response.ok) {
+                    tg.close(); // Если Make принял данные - закрываем
+                } else {
+                    alert("Make не принял данные! Ошибка сервера: " + response.status);
+                    btn.innerText = "🚖 Рассчитать стоимость";
+                }
+            })
+            .catch(error => {
+                alert("Ошибка отправки! Проверь правильность ссылки: " + error);
+                btn.innerText = "🚖 Рассчитать стоимость";
             });
         }
-    </script></script>
+   </script>
 </body>
 </html>
