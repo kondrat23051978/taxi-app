@@ -37,7 +37,7 @@
         
         function sendOrder() {
             let btn = document.getElementById("mainBtn");
-            btn.innerText = "⏳..."; 
+            btn.innerText = "⏳ Секундочку..."; // Даем понять клиенту, что процесс пошел
             
             let data = {
                 from: document.getElementById("from").value,
@@ -47,22 +47,19 @@
                 clientName: tg.initDataUnsafe?.user?.first_name
             };
             
-            // Твоя ссылка:
             let webhookUrl = "https://hook.eu1.make.com/hvm8e74ivxv19ox2421l7np8hpd133hw";
             
+            // 1. Кидаем данные в интернет
             fetch(webhookUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
-            })
-            .then(() => {
-                // Данные улетели - мгновенно закрываем окно
+            }).catch(e => console.log(e)); // Игнорируем ошибки сети
+
+            // 2. Ставим жесткий таймер на закрытие окна (ровно 800 миллисекунд)
+            setTimeout(() => {
                 tg.close();
-            })
-            .catch(() => {
-                // Закрываем окно даже при сбое интернета
-                tg.close();
-            });
+            }, 999);
         }
     </script>
 </body>
