@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ Такси</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: var(--tg-theme-bg-color, #ffffff); color: var(--tg-theme-text-color, #000000); }
+        input, select, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        button { background-color: var(--tg-theme-button-color, #2481cc); color: var(--tg-theme-button-text-color, #ffffff); border: none; font-weight: bold; cursor: pointer; padding: 15px; }
+        h2 { text-align: center; margin-bottom: 20px; color: var(--tg-theme-text-color, #000000); }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: var(--tg-theme-hint-color, #999); }
+    </style>
+</head>
+<body>
+    <h2>🚕 Вызов такси</h2>
+    
+    <label>Откуда едем?</label>
+    <input type="text" id="from" placeholder="Например: ул. Крещатик, 1">
+    
+    <label>Куда едем?</label>
+    <input type="text" id="to" placeholder="Например: Аэропорт">
+    
+    <label>Тариф</label>
+    <select id="tariff">
+        <option value="Стандарт">Стандарт</option>
+        <option value="Комфорт">Комфорт</option>
+        <option value="Бизнес">Бизнес</option>
+    </select>
+    
+    <button onclick="sendOrder()">🚖 Рассчитать стоимость</button>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); 
+        
+        function sendOrder() {
+            let data = {
+                from: document.getElementById("from").value,
+                to: document.getElementById("to").value,
+                tariff: document.getElementById("tariff").value
+            };
+            
+            tg.sendData(JSON.stringify(data));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
